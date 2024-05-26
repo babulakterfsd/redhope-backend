@@ -4,6 +4,7 @@ import validateRequest from '../../middlewares/validateRequest';
 import { UserControllers } from './auth.controller';
 import {
   changePasswordSchema,
+  changeUserStatusSchema,
   loginSchema,
   signupSchema,
   updateProfileSchema,
@@ -44,6 +45,7 @@ router.get('/getallusers', auth('admin'), UserControllers.getAllUsersForAdmin);
 // activate or inactivate user by admin
 router.post(
   '/change-user-status',
+  validateRequest(changeUserStatusSchema),
   auth('admin'),
   UserControllers.activateOrInactivateAccount,
 );

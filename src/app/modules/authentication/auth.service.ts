@@ -82,18 +82,12 @@ const loginUserInDB = async (user: TUser) => {
   const isUserExistsWithEmail = await UserModel.isUserExistsWithEmail(
     user?.email,
   );
-  const isUserExistsWithUsername = await UserModel.isUserExistsWithUsername(
-    user?.username,
-  );
   const userFromDB = await UserModel.findOne({
-    $or: [{ email: user?.email }, { username: user?.username }],
+    email: user?.email,
   });
 
   if (!isUserExistsWithEmail) {
     throw new Error('No user found with this email');
-  }
-  if (!isUserExistsWithUsername) {
-    throw new Error('No user found with this username');
   }
 
   if (userFromDB?.isAccountActive === false) {
@@ -232,8 +226,8 @@ const changePasswordInDB = async (
   }
 
   if (
-    userFromDB?.email === 'admin@redhope.com' ||
-    userFromDB?.email === 'donor@redhope.com'
+    userFromDB?.email === 'babulakterfsd@gmail.com' ||
+    userFromDB?.email === 'xpawal@gmail.com'
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
@@ -363,6 +357,18 @@ const updateUserProfileInDB = async (
     throw new JsonWebTokenError('Unauthorized Access!');
   }
 
+  if (dataToBeUpdated?.email) {
+    if (
+      user?.email === 'babulakterfsd@gmail.com' ||
+      user?.email === 'xpawal@gmail.com'
+    ) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Update email is not allowed for this demo account. Please create your own account to check this feature.',
+      );
+    }
+  }
+
   const {
     name,
     username,
@@ -478,7 +484,7 @@ const getAllUsersFromDB = async (decodedUser: TDecodedUser, req: Request) => {
 
   //implement pagination
   const pageToBeFetched = Number(page) || 1;
-  const limitToBeFetched = Number(limit) || 5;
+  const limitToBeFetched = Number(limit) || 10;
   const skip = (pageToBeFetched - 1) * limitToBeFetched;
 
   // search by name or email
@@ -518,7 +524,7 @@ const getAllUsersFromDB = async (decodedUser: TDecodedUser, req: Request) => {
 // activate or inactivate an user by admin
 const activateOrInactivateAccount = async (
   decodedUser: TDecodedUser,
-  username: string,
+  email: string,
   activeStatus: boolean,
 ) => {
   const { role } = decodedUser;
@@ -527,7 +533,7 @@ const activateOrInactivateAccount = async (
   }
 
   const user = await UserModel.findOne({
-    username,
+    email,
   });
 
   if (!user) {
@@ -539,8 +545,8 @@ const activateOrInactivateAccount = async (
 
   return {
     message: activeStatus
-      ? `${user?.name}'s account is inactivated !`
-      : `${user?.name}'s account is active now !`,
+      ? `${user?.name}'s account is active now !`
+      : `${user?.name}'s account is inactive now !`,
   };
 };
 

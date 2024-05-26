@@ -17,8 +17,8 @@ export const userSchema = z.object({
     invalid_type_error: ' must be string',
     required_error: ' is required',
   }),
-  isAvailableToDonate: z.string({
-    invalid_type_error: ' must be true or false',
+  isAvailableToDonate: z.boolean({
+    invalid_type_error: ' must be boolean',
     required_error: ' is required',
   }),
   role: z.enum(['admin', 'donor'], {
@@ -101,12 +101,23 @@ export const signupSchema = z.object({
     invalid_type_error: ' must be string',
     required_error: ' is required',
   }),
-  isAvailableToDonate: z.enum(['true', 'false'], {
-    invalid_type_error: ' must be true or false',
+  isAvailableToDonate: z.boolean({
+    invalid_type_error: ' must be boolean',
     required_error: ' is required',
   }),
   bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
     invalid_type_error: ' must be a valid blood group',
+    required_error: ' is required',
+  }),
+});
+
+export const changeUserStatusSchema = z.object({
+  email: z.string({
+    invalid_type_error: ' must be string',
+    required_error: ' is required',
+  }),
+  activeStatus: z.boolean({
+    invalid_type_error: ' must be boolean',
     required_error: ' is required',
   }),
 });

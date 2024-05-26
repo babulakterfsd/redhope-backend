@@ -35,13 +35,13 @@
 ### DEMO LOGIN DETAILS
 
       * admin :
-          - email: admin@redhope.com
-          - password: admin123 (as demo account, you can't change the password of this account)
+          - email: babulakterfsd@gmail.com
+          - password: babul123 (as demo account, you can't change the password of this account)
 
       * donor :
-          - email: donor@redhope.com
-          - password: donor123 (as demo account, you can't change the password of this account)
+          - email: xpawal@gmail.com
+          - password: xpawal123 (as demo account, you can't change the password of this account)
 
       * donor2 :
-          - email: donor2@redhope.com
-          - password: donor2123 (you can check password change functionality with this account)
+          - email: insan@gmail.com
+          - password: insan123 (you can check password change functionality with this account)

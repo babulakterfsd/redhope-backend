@@ -53,6 +53,11 @@ export type TUserProfileDataToBeUpdated = {
   };
 };
 
+export type TChangeUserStatus = {
+  email: string;
+  activeStatus: boolean;
+};
+
 export type TUserRole = 'admin' | 'donor';
 
 export type TDecodedUser = {

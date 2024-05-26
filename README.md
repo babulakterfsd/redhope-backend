@@ -36,12 +36,12 @@
 
       * admin :
           - email: babulakterfsd@gmail.com
-          - password: babul123 (as demo account, you can't change the password of this account)
+          - password: babul123 (as demo account, you can't change the password and email of this account)
 
       * donor :
           - email: xpawal@gmail.com
-          - password: xpawal123 (as demo account, you can't change the password of this account)
+          - password: xpawal123 (as demo account, you can't change the password and email of this account)
 
       * donor2 :
           - email: insan@gmail.com
-          - password: insan123 (you can check password change functionality with this account)
+          - password: insan123 (you can check password or email change functionality with this account)

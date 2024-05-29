@@ -522,6 +522,77 @@ const getAllUsersFromDB = async (decodedUser: TDecodedUser, req: Request) => {
   };
 };
 
+// get all donors
+const getAllDonorsFromDB = async (req: Request) => {
+  const { page, limit, search, isAvailableToDonate, bloodGroup, location } =
+    req?.query;
+
+  console.log({
+    page,
+    limit,
+    search,
+    isAvailableToDonate,
+    bloodGroup,
+    location,
+  });
+
+  const totalDocs = await UserModel.countDocuments();
+  const meta = {
+    page: Number(page) || 1,
+    limit: Number(limit) || 10,
+    total: totalDocs,
+  };
+
+  //implement pagination
+  const pageToBeFetched = Number(page) || 1;
+  const limitToBeFetched = Number(limit) || 10;
+  const skip = (pageToBeFetched - 1) * limitToBeFetched;
+
+  // search by name or email
+  const filter: Record<string, any> = {};
+
+  if (isAvailableToDonate) {
+    filter.isAvailableToDonate = isAvailableToDonate;
+  }
+
+  if (bloodGroup) {
+    filter.bloodGroup = bloodGroup;
+  }
+
+  if (search) {
+    filter.$or = [
+      { name: new RegExp(String(search), 'i') },
+      { email: new RegExp(String(search), 'i') },
+      { 'location.city': new RegExp(String(search), 'i') },
+      { 'location.state': new RegExp(String(search), 'i') },
+      { 'location.address': new RegExp(String(search), 'i') },
+      { 'location.country': new RegExp(String(search), 'i') },
+    ];
+  }
+
+  const result = await UserModel.find(filter)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limitToBeFetched);
+
+  return {
+    meta,
+    data: result?.map((user) => {
+      return {
+        _id: user?._id,
+        name: user?.name,
+        username: user?.username,
+        email: user?.email,
+        profileImage: user?.profileImage,
+        isAccountActive: user?.isAccountActive,
+        isAvailableToDonate: user?.isAvailableToDonate,
+        location: user?.location,
+        bloodGroup: user?.bloodGroup,
+      };
+    }),
+  };
+};
+
 // activate or inactivate an user by admin
 const activateOrInactivateAccount = async (
   decodedUser: TDecodedUser,
@@ -596,4 +667,5 @@ export const UserServices = {
   getAllUsersFromDB,
   activateOrInactivateAccount,
   getMyProfile,
+  getAllDonorsFromDB,
 };

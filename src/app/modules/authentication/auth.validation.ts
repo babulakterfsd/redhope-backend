@@ -25,10 +25,22 @@ export const userSchema = z.object({
     invalid_type_error: 'User must be either admin or donor',
     required_error: ' is required',
   }),
-  bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
-    invalid_type_error: ' must be a valid blood group',
-    required_error: ' is required',
-  }),
+  bloodGroup: z.enum(
+    [
+      'A-positive',
+      'A-negative',
+      'B-positive',
+      'B-negative',
+      'AB-positive',
+      'AB-negative',
+      'O-positive',
+      'O-negative',
+    ],
+    {
+      invalid_type_error: ' must be a valid blood group',
+      required_error: ' is required',
+    },
+  ),
   lastTwoPasswords: z
     .array(
       z
@@ -105,10 +117,22 @@ export const signupSchema = z.object({
     invalid_type_error: ' must be boolean',
     required_error: ' is required',
   }),
-  bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
-    invalid_type_error: ' must be a valid blood group',
-    required_error: ' is required',
-  }),
+  bloodGroup: z.enum(
+    [
+      'A-positive',
+      'A-negative',
+      'B-positive',
+      'B-negative',
+      'AB-positive',
+      'AB-negative',
+      'O-positive',
+      'O-negative',
+    ],
+    {
+      invalid_type_error: ' must be a valid blood group',
+      required_error: ' is required',
+    },
+  ),
 });
 
 export const changeUserStatusSchema = z.object({

@@ -42,6 +42,9 @@ router.post('/refresh-token', UserControllers.getAccessTokenUsingRefreshToken);
 // get all users for admin
 router.get('/getallusers', auth('admin'), UserControllers.getAllUsersForAdmin);
 
+// get all donors
+router.get('/getalldonors', UserControllers.getAllDonors);
+
 // activate or inactivate user by admin
 router.post(
   '/change-user-status-or-role',

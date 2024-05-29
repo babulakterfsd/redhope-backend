@@ -193,6 +193,18 @@ const getAllUsersForAdmin = catchAsync(async (req, res) => {
   });
 });
 
+// get all donors
+const getAllDonors = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllDonorsFromDB(req);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All donors have been retrieved succesfully',
+    data: result,
+  });
+});
+
 // activate or deactivate user by admin
 const activateOrInactivateAccount = catchAsync(async (req, res) => {
   const token = req?.headers?.authorization;
@@ -231,4 +243,5 @@ export const UserControllers = {
   getAllUsersForAdmin,
   activateOrInactivateAccount,
   getMyProfile,
+  getAllDonors,
 };

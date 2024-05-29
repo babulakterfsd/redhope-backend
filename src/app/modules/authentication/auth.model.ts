@@ -71,6 +71,23 @@ const userSchema = new Schema<TUser, TUserModel>(
       required: [true, 'isAvailableToDonate is required'],
       default: true,
     },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: [
+          'A-positive',
+          'A-negative',
+          'B-positive',
+          'B-negative',
+          'AB-positive',
+          'AB-negative',
+          'O-positive',
+          'O-negative',
+        ],
+        message: '{VALUE} is not a valid blood group',
+      },
+      required: [true, 'Blood group is required'],
+    },
     location: {
       address: {
         type: String,

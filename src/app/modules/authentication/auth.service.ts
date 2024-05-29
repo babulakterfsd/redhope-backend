@@ -15,6 +15,7 @@ import {
   TLastPassword,
   TUser,
   TUserProfileDataToBeUpdated,
+  TUserRole,
 } from './auth.interface';
 import { UserModel } from './auth.model';
 
@@ -526,9 +527,10 @@ const activateOrInactivateAccount = async (
   decodedUser: TDecodedUser,
   email: string,
   activeStatus: boolean,
+  userRole: TUserRole,
 ) => {
-  const { role } = decodedUser;
-  if (role !== 'admin') {
+  const { role: decodedUserRole } = decodedUser;
+  if (decodedUserRole !== 'admin') {
     throw new Error('Unauthorized Access');
   }
 
@@ -540,13 +542,22 @@ const activateOrInactivateAccount = async (
     throw new Error('User not found');
   }
 
-  user.isAccountActive = activeStatus;
+  user.isAccountActive =
+    activeStatus !== undefined ? activeStatus : user?.isAccountActive;
+  user.role = userRole !== undefined ? userRole : user?.role;
   await user.save();
 
   return {
-    message: activeStatus
-      ? `${user?.name}'s account is active now !`
-      : `${user?.name}'s account is inactive now !`,
+    _id: user?._id,
+    name: user?.name,
+    username: user?.username,
+    email: user?.email,
+    role: user?.role,
+    profileImage: user?.profileImage,
+    isAccountActive: user?.isAccountActive,
+    isAvailableToDonate: user?.isAvailableToDonate,
+    location: user?.location,
+    bloodGroup: user?.bloodGroup,
   };
 };
 

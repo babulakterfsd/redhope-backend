@@ -203,18 +203,19 @@ const activateOrInactivateAccount = catchAsync(async (req, res) => {
     config.jwt_access_secret as string,
   );
 
-  const { email, activeStatus } = req.body;
+  const { email, activeStatus, userRole } = req.body;
 
   const result = await UserServices.activateOrInactivateAccount(
     decodedUser as TDecodedUser,
     email,
     activeStatus,
+    userRole,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User account status has been updated succesfully',
+    message: 'User account has been updated succesfully',
     data: result,
   });
 });

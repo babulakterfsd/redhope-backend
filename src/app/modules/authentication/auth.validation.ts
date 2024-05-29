@@ -116,10 +116,18 @@ export const changeUserStatusSchema = z.object({
     invalid_type_error: ' must be string',
     required_error: ' is required',
   }),
-  activeStatus: z.boolean({
-    invalid_type_error: ' must be boolean',
-    required_error: ' is required',
-  }),
+  activeStatus: z
+    .boolean({
+      invalid_type_error: ' must be boolean',
+      required_error: ' is required',
+    })
+    .optional(),
+  role: z
+    .enum(['admin', 'donor'], {
+      invalid_type_error: 'User must be either admin or donor',
+      required_error: ' is required',
+    })
+    .optional(),
 });
 
 export const loginSchema = z.object({

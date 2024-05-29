@@ -44,7 +44,7 @@ router.get('/getallusers', auth('admin'), UserControllers.getAllUsersForAdmin);
 
 // activate or inactivate user by admin
 router.post(
-  '/change-user-status',
+  '/change-user-status-or-role',
   validateRequest(changeUserStatusSchema),
   auth('admin'),
   UserControllers.activateOrInactivateAccount,

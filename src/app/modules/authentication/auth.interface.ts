@@ -56,6 +56,7 @@ export type TUserProfileDataToBeUpdated = {
 export type TChangeUserStatus = {
   email: string;
   activeStatus: boolean;
+  role: TUserRole;
 };
 
 export type TUserRole = 'admin' | 'donor';

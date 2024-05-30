@@ -563,11 +563,17 @@ const getAllDonorsFromDB = async (req: Request) => {
     filter.$or = [
       { name: new RegExp(String(search), 'i') },
       { email: new RegExp(String(search), 'i') },
-      { 'location.city': new RegExp(String(search), 'i') },
-      { 'location.state': new RegExp(String(search), 'i') },
-      { 'location.address': new RegExp(String(search), 'i') },
-      { 'location.country': new RegExp(String(search), 'i') },
     ];
+  }
+
+  if (location) {
+    filter.$or = filter.$or || [];
+    filter.$or.push(
+      { 'location.address': new RegExp(String(location), 'i') },
+      { 'location.city': new RegExp(String(location), 'i') },
+      { 'location.state': new RegExp(String(location), 'i') },
+      { 'location.country': new RegExp(String(location), 'i') },
+    );
   }
 
   const result = await UserModel.find(filter)

@@ -205,6 +205,18 @@ const getAllDonors = catchAsync(async (req, res) => {
   });
 });
 
+// get single donor by id
+const getSingleDonorById = catchAsync(async (req, res) => {
+  const result = await UserServices.getSingleDonorByIdFromDB(req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Donor has been retrieved succesfully',
+    data: result,
+  });
+});
+
 // activate or deactivate user by admin
 const activateOrInactivateAccount = catchAsync(async (req, res) => {
   const token = req?.headers?.authorization;
@@ -244,4 +256,5 @@ export const UserControllers = {
   activateOrInactivateAccount,
   getMyProfile,
   getAllDonors,
+  getSingleDonorById,
 };

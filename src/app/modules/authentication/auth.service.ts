@@ -599,6 +599,27 @@ const getAllDonorsFromDB = async (req: Request) => {
   };
 };
 
+// get single donor by id
+const getSingleDonorByIdFromDB = async (id: string) => {
+  const result = await UserModel.findById(id);
+
+  if (!result) {
+    throw new Error('Donor not found');
+  }
+
+  return {
+    _id: result?._id,
+    name: result?.name,
+    username: result?.username,
+    email: result?.email,
+    profileImage: result?.profileImage,
+    isAccountActive: result?.isAccountActive,
+    isAvailableToDonate: result?.isAvailableToDonate,
+    location: result?.location,
+    bloodGroup: result?.bloodGroup,
+  };
+};
+
 // activate or inactivate an user by admin
 const activateOrInactivateAccount = async (
   decodedUser: TDecodedUser,
@@ -674,4 +695,5 @@ export const UserServices = {
   activateOrInactivateAccount,
   getMyProfile,
   getAllDonorsFromDB,
+  getSingleDonorByIdFromDB,
 };

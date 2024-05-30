@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { AuthRoutes } from '../modules/authentication/auth.route';
+import { BloodRequestRoutes } from '../modules/bloodrequest/request.route';
 
 const router = Router();
 
@@ -7,6 +8,10 @@ const moduleRoutes = [
   {
     path: '/auth',
     route: AuthRoutes,
+  },
+  {
+    path: '/bloodrequests',
+    route: BloodRequestRoutes,
   },
 ];
 

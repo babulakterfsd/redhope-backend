@@ -205,9 +205,11 @@ const getAllDonors = catchAsync(async (req, res) => {
   });
 });
 
-// get single donor by id
-const getSingleDonorById = catchAsync(async (req, res) => {
-  const result = await UserServices.getSingleDonorByIdFromDB(req?.params?.id);
+// get single donor by username
+const getSingleDonorByUsername = catchAsync(async (req, res) => {
+  const result = await UserServices.getSingleDonorByUsernameFromDB(
+    req?.params?.username,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -256,5 +258,5 @@ export const UserControllers = {
   activateOrInactivateAccount,
   getMyProfile,
   getAllDonors,
-  getSingleDonorById,
+  getSingleDonorByUsername,
 };

@@ -45,8 +45,8 @@ router.get('/getallusers', auth('admin'), UserControllers.getAllUsersForAdmin);
 // get all donors
 router.get('/getalldonors', UserControllers.getAllDonors);
 
-// get single donor by id
-router.get('/getdonor/:id', UserControllers.getSingleDonorById);
+// get single donor by username
+router.get('/getalldonors/:username', UserControllers.getSingleDonorByUsername);
 
 // activate or inactivate user by admin
 router.post(

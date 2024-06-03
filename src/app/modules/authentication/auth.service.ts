@@ -597,9 +597,11 @@ const getAllDonorsFromDB = async (req: Request) => {
   };
 };
 
-// get single donor by id
-const getSingleDonorByIdFromDB = async (id: string) => {
-  const result = await UserModel.findById(id);
+// get single donor by username
+const getSingleDonorByUsernameFromDB = async (username: string) => {
+  const result = await UserModel.findOne({
+    username,
+  });
 
   if (!result) {
     throw new Error('Donor not found');
@@ -692,5 +694,5 @@ export const UserServices = {
   activateOrInactivateAccount,
   getMyProfile,
   getAllDonorsFromDB,
-  getSingleDonorByIdFromDB,
+  getSingleDonorByUsernameFromDB,
 };

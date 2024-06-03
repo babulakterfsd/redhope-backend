@@ -527,15 +527,6 @@ const getAllDonorsFromDB = async (req: Request) => {
   const { page, limit, search, isAvailableToDonate, bloodGroup, location } =
     req?.query;
 
-  console.log({
-    page,
-    limit,
-    search,
-    isAvailableToDonate,
-    bloodGroup,
-    location,
-  });
-
   const totalDocs = await UserModel.countDocuments();
   const meta = {
     page: Number(page) || 1,
@@ -552,11 +543,19 @@ const getAllDonorsFromDB = async (req: Request) => {
   const filter: Record<string, any> = {};
 
   if (isAvailableToDonate) {
-    filter.isAvailableToDonate = isAvailableToDonate;
+    if (isAvailableToDonate !== 'all') {
+      if (isAvailableToDonate === 'true') {
+        filter.isAvailableToDonate = true;
+      } else {
+        filter.isAvailableToDonate = false;
+      }
+    }
   }
 
   if (bloodGroup) {
-    filter.bloodGroup = bloodGroup;
+    if (bloodGroup !== 'all') {
+      filter.bloodGroup = bloodGroup;
+    }
   }
 
   if (search) {

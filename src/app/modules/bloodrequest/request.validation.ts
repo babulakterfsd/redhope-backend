@@ -2,10 +2,6 @@ import { z } from 'zod';
 
 export const bloodRequestValidationSchema = z.object({
   requester: z.object({
-    _id: z.string({
-      invalid_type_error: 'Requester ID must be a string',
-      required_error: 'Requester ID is required',
-    }),
     name: z.string({
       invalid_type_error: 'Requester name must be a string',
       required_error: 'Requester name is required',
@@ -18,24 +14,9 @@ export const bloodRequestValidationSchema = z.object({
       invalid_type_error: 'Requester email must be a string',
       required_error: 'Requester email is required',
     }),
-    isAvailableToDonate: z.boolean({
-      invalid_type_error: 'Requester isAvailableToDonate must be a boolean',
-      required_error: 'Requester isAvailableToDonate is required',
-    }),
-    bloodGroup: z.string({
-      invalid_type_error: 'Requester bloodGroup must be a string',
-      required_error: 'Requester bloodGroup is required',
-    }),
-    profileImage: z.string({
-      invalid_type_error: 'Requester profileImage must be a string',
-    }),
     isAccountActive: z.boolean({
       invalid_type_error: 'Requester isAccountActive must be a boolean',
       required_error: 'Requester isAccountActive is required',
-    }),
-    role: z.string({
-      invalid_type_error: 'Requester role must be a string',
-      required_error: 'Requester role is required',
     }),
     location: z.object({
       address: z.string({
@@ -77,10 +58,6 @@ export const bloodRequestValidationSchema = z.object({
     }),
   }),
   donor: z.object({
-    _id: z.string({
-      invalid_type_error: 'Donor ID must be a string',
-      required_error: 'Donor ID is required',
-    }),
     name: z.string({
       invalid_type_error: 'Donor name must be a string',
       required_error: 'Donor name is required',
@@ -101,16 +78,9 @@ export const bloodRequestValidationSchema = z.object({
       invalid_type_error: 'Donor bloodGroup must be a string',
       required_error: 'Donor bloodGroup is required',
     }),
-    profileImage: z.string({
-      invalid_type_error: 'Donor profileImage must be a string',
-    }),
     isAccountActive: z.boolean({
       invalid_type_error: 'Donor isAccountActive must be a boolean',
       required_error: 'Donor isAccountActive is required',
-    }),
-    role: z.string({
-      invalid_type_error: 'Donor role must be a string',
-      required_error: 'Donor role is required',
     }),
     location: z.object({
       address: z.string({

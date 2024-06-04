@@ -1,15 +1,10 @@
 export type TBloodRequest = {
   _id: string;
   requester: {
-    _id: string;
     name: string;
     username: string;
     email: string;
-    isAvailableToDonate: boolean;
-    bloodGroup: string;
-    profileImage?: string;
     isAccountActive: boolean;
-    role: 'admin' | 'donor';
     location?: {
       address?: string;
       city?: string;
@@ -26,15 +21,12 @@ export type TBloodRequest = {
     reasonForDonation: string;
   };
   donor: {
-    _id: string;
     name: string;
     username: string;
     email: string;
     isAvailableToDonate: boolean;
     bloodGroup: string;
-    profileImage?: string;
     isAccountActive: boolean;
-    role: 'admin' | 'donor';
     location?: {
       address?: string;
       city?: string;

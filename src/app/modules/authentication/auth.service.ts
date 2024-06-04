@@ -611,6 +611,7 @@ const getSingleDonorByUsernameFromDB = async (username: string) => {
     _id: result?._id,
     name: result?.name,
     username: result?.username,
+    email: result?.email,
     profileImage: result?.profileImage,
     isAccountActive: result?.isAccountActive,
     isAvailableToDonate: result?.isAvailableToDonate,

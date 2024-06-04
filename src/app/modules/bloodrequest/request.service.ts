@@ -13,14 +13,14 @@ const createBloodRequestInDB = async (
   const { requester, donor } = bloodRequestData;
 
   // check if logged in user is requester or not
-  if (decodedUser._id !== requester._id) {
+  if (decodedUser.username !== requester.username) {
     throw new Error(
       'RedHope does not allow you to create blood request for others. Only you can create blood request for yourself.',
     );
   }
 
   // check if requester and donor are same
-  if (requester._id === donor._id) {
+  if (requester.username === donor.username) {
     throw new Error('Requester and donor cannot be same');
   }
   // check if donor is available to donate
@@ -34,10 +34,11 @@ const createBloodRequestInDB = async (
 
   // check if requester has already pending request to this donor
   const isPendingRequestAlreadyExists = await BloodRequestModel.findOne({
-    'requester._id': requester._id,
-    'donor._id': donor._id,
+    'requester.username': requester.username,
+    'donor.username': donor.username,
     requestStatus: 'pending',
   });
+
   if (isPendingRequestAlreadyExists) {
     throw new Error('Requester already has pending request to this donor');
   }

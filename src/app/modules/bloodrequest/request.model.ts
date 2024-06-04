@@ -4,11 +4,6 @@ import { TBloodRequest } from './request.interface';
 const bloodRequestsSchema = new Schema<TBloodRequest>(
   {
     requester: {
-      _id: {
-        type: String,
-        required: [true, '_id is required'],
-        trim: true,
-      },
       name: {
         type: String,
         required: [true, 'Name is required'],
@@ -24,27 +19,9 @@ const bloodRequestsSchema = new Schema<TBloodRequest>(
         required: [true, 'Email is required'],
         trim: true,
       },
-      isAvailableToDonate: {
-        type: Boolean,
-        required: [true, 'isAvailableToDonate is required'],
-      },
-      bloodGroup: {
-        type: String,
-        required: [true, 'Blood group is required'],
-        trim: true,
-      },
-      profileImage: {
-        type: String,
-        default: '',
-      },
       isAccountActive: {
         type: Boolean,
         required: [true, 'isAccountActive is required'],
-      },
-      role: {
-        type: String,
-        required: [true, 'Role is required'],
-        trim: true,
       },
       location: {
         address: {
@@ -74,11 +51,6 @@ const bloodRequestsSchema = new Schema<TBloodRequest>(
       },
     },
     donor: {
-      _id: {
-        type: String,
-        required: [true, '_id is required'],
-        trim: true,
-      },
       name: {
         type: String,
         required: [true, 'Name is required'],
@@ -103,18 +75,9 @@ const bloodRequestsSchema = new Schema<TBloodRequest>(
         required: [true, 'Blood group is required'],
         trim: true,
       },
-      profileImage: {
-        type: String,
-        default: '',
-      },
       isAccountActive: {
         type: Boolean,
         required: [true, 'isAccountActive is required'],
-      },
-      role: {
-        type: String,
-        required: [true, 'Role is required'],
-        trim: true,
       },
       location: {
         address: {

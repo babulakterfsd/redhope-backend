@@ -6,7 +6,7 @@ import { bloodRequestValidationSchema } from './request.validation';
 
 const router = express.Router();
 
-//
+// create blood request
 router.post(
   '/create-blood-request',
   auth('admin', 'donor'),

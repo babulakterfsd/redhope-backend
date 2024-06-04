@@ -12,7 +12,6 @@ import { Request } from 'express';
 import {
   TChangePasswordData,
   TDecodedUser,
-  TLastPassword,
   TUser,
   TUserProfileDataToBeUpdated,
   TUserRole,
@@ -212,51 +211,25 @@ const getAccessTokenByRefreshToken = async (token: string) => {
 };
 
 // change password
-const changePasswordInDB = async (
-  passwordData: TChangePasswordData,
-  user: TDecodedUser,
-) => {
-  const { currentPassword, newPassword } = passwordData;
+const changePasswordInDB = async (passwordData: TChangePasswordData) => {
+  const { currentPassword, newPassword, useremail } = passwordData;
 
   // check if the user exists in the database
   const userFromDB = await UserModel.findOne({
-    email: user?.email,
+    email: useremail,
   });
   if (!userFromDB) {
     throw new JsonWebTokenError('Unauthorized Access!');
   }
 
   if (
-    userFromDB?.email === 'babulakterfsd@gmail.com' ||
-    userFromDB?.email === 'xpawal@gmail.com'
+    useremail === 'babulakterfsd@gmail.com' ||
+    useremail === 'xpawal@gmail.com'
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       'Password change is not allowed for this demo account. Please create your own account to check this feature.',
     );
-  }
-
-  const currentAccesstokenIssuedAt = user?.iat * 1000;
-
-  let lastPasswordChangedAt: Date | number = userFromDB?.lastTwoPasswords?.[1]
-    ?.changedAt
-    ? (userFromDB?.lastTwoPasswords?.[1]?.changedAt as Date)
-    : (userFromDB?.lastTwoPasswords?.[0]?.changedAt as Date);
-
-  //convert lastPasswordChangedAt to miliseconds
-  lastPasswordChangedAt = new Date(lastPasswordChangedAt as Date).getTime();
-
-  if (userFromDB?.lastTwoPasswords?.length === 0) {
-    lastPasswordChangedAt = (userFromDB?.createdAt as Date).getTime();
-  }
-
-  if (currentAccesstokenIssuedAt < lastPasswordChangedAt) {
-    // throw new JsonWebTokenError('Unauthorized Access!');
-    return {
-      statusCode: 406,
-      status: 'failed',
-      message: 'Recent password change detected.',
-    };
   }
 
   // check if the current password the user gave is correct
@@ -274,26 +247,7 @@ const changePasswordInDB = async (
     throw new Error('New password must be different from the current password');
   }
 
-  // Check if the new password is the same as the last two passwords
-  const isSameAsLastTwoPasswords = userFromDB?.lastTwoPasswords?.some(
-    (password: TLastPassword) => {
-      return bcrypt.compareSync(newPassword, password.oldPassword);
-    },
-  );
-
-  if (isSameAsLastTwoPasswords) {
-    const lastUsedDate = userFromDB?.lastTwoPasswords?.[0]?.changedAt;
-    const formattedLastUsedDate = lastUsedDate
-      ? new Date(lastUsedDate).toLocaleString()
-      : 'unknown';
-
-    throw new Error(
-      `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formattedLastUsedDate}).`,
-    );
-  }
-
   // Check if the new password meets the minimum requirements
-
   if (newPassword.length < 6 || !/\d/.test(newPassword)) {
     throw new Error(
       'New password must be minimum 6 characters and include both letters and numbers',
@@ -303,27 +257,10 @@ const changePasswordInDB = async (
   // Update the password and keep track of the last two passwords
   const hashedNewPassword = await bcrypt.hash(newPassword, 12);
 
-  const newLastTwoPasswords = () => {
-    if (userFromDB?.lastTwoPasswords?.length === 0) {
-      return [{ oldPassword: userFromDB?.password, changedAt: new Date() }];
-    } else if (userFromDB?.lastTwoPasswords?.length === 1) {
-      return [
-        ...userFromDB?.lastTwoPasswords,
-        { oldPassword: userFromDB?.password, changedAt: new Date() },
-      ];
-    } else if (userFromDB?.lastTwoPasswords?.length === 2) {
-      return [
-        userFromDB?.lastTwoPasswords[1],
-        { oldPassword: userFromDB?.password, changedAt: new Date() },
-      ];
-    }
-  };
-
   const result = await UserModel.findOneAndUpdate(
     { email: userFromDB?.email },
     {
       password: hashedNewPassword,
-      lastTwoPasswords: newLastTwoPasswords(),
     },
     {
       new: true,
@@ -347,27 +284,18 @@ const changePasswordInDB = async (
 
 //update user profile
 const updateUserProfileInDB = async (
-  user: TDecodedUser,
   dataToBeUpdated: TUserProfileDataToBeUpdated,
 ) => {
+  console.log('dataToBeUpdated', dataToBeUpdated);
+
+  const userEmail = dataToBeUpdated?.email;
+
   const userFromDB = await UserModel.findOne({
-    email: user?.email,
+    email: userEmail,
   });
 
   if (!userFromDB) {
     throw new JsonWebTokenError('Unauthorized Access!');
-  }
-
-  if (dataToBeUpdated?.email) {
-    if (
-      user?.email === 'babulakterfsd@gmail.com' ||
-      user?.email === 'xpawal@gmail.com'
-    ) {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        'Update email is not allowed for this demo account. Please create your own account to check this feature.',
-      );
-    }
   }
 
   const {

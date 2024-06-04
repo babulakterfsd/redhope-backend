@@ -1,7 +1,6 @@
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import config from '../../config';
-import { TCustomErrorForRecentPasswordChange } from '../../interface/error';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { TDecodedUser } from './auth.interface';
@@ -79,53 +78,22 @@ const getAccessTokenUsingRefreshToken = catchAsync(async (req, res) => {
 //change password
 const changePassword = catchAsync(async (req, res) => {
   const passwordData = req.body;
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
 
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
+  const result = await UserServices.changePasswordInDB(passwordData);
 
-  const result = await UserServices.changePasswordInDB(
-    passwordData,
-    decodedUser as TDecodedUser,
-  );
-
-  const { statusCode, message } = result as TCustomErrorForRecentPasswordChange;
-
-  if (statusCode === 406 && message === 'Recent password change detected.') {
-    sendResponse(res, {
-      statusCode: httpStatus.NOT_ACCEPTABLE,
-      success: false,
-      message: 'Recent password change detected.',
-      data: null,
-    });
-  } else {
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Password has been changed succesfully',
-      data: result,
-    });
-  }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password has been changed succesfully',
+    data: result,
+  });
 });
 
 // update user profile
 const updateUserProfile = catchAsync(async (req, res) => {
   const dataToBeUpdated = req.body;
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
 
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
-  const result = await UserServices.updateUserProfileInDB(
-    decodedUser as TDecodedUser,
-    dataToBeUpdated,
-  );
+  const result = await UserServices.updateUserProfileInDB(dataToBeUpdated);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

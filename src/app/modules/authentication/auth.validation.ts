@@ -174,6 +174,10 @@ export const changePasswordSchema = z.object({
     invalid_type_error: ' must be string',
     required_error: ' is required',
   }),
+  useremail: z.string({
+    invalid_type_error: ' must be string',
+    required_error: ' is required',
+  }),
 });
 
 export const updateProfileSchema = z.object({

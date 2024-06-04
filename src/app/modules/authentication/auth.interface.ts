@@ -9,6 +9,7 @@ export type TLastPassword = {
 export type TChangePasswordData = {
   currentPassword: string;
   newPassword: string;
+  useremail: string;
 };
 
 export type TUser = {

@@ -9,7 +9,6 @@ const router = express.Router();
 // create blood request
 router.post(
   '/create-blood-request',
-  auth('admin', 'donor'),
   validateRequest(bloodRequestValidationSchema),
   BloodRequestController.createBloodRequest,
 );

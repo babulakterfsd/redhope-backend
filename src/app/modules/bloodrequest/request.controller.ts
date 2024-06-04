@@ -9,18 +9,7 @@ import { BloodRequestServices } from './request.service';
 
 //create blood request
 const createBloodRequest = catchAsync(async (req, res) => {
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
-
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
-  const result = await BloodRequestServices.createBloodRequestInDB(
-    decodedUser as TDecodedUser,
-    req.body,
-  );
+  const result = await BloodRequestServices.createBloodRequestInDB(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

@@ -48,6 +48,12 @@ router.get('/getalldonors', UserControllers.getAllDonors);
 // get single donor by username
 router.get('/getalldonors/:username', UserControllers.getSingleDonorByUsername);
 
+// get single donor by email
+router.get(
+  '/getalldonorsbyemail/:email',
+  UserControllers.getSingleDonorByEmail,
+);
+
 // activate or inactivate user by admin
 router.post(
   '/change-user-status-or-role',

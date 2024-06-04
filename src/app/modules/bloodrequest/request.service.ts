@@ -6,18 +6,8 @@ import { TBloodRequest } from './request.interface';
 import { BloodRequestModel } from './request.model';
 
 // create a blood request
-const createBloodRequestInDB = async (
-  decodedUser: TDecodedUser,
-  bloodRequestData: TBloodRequest,
-) => {
+const createBloodRequestInDB = async (bloodRequestData: TBloodRequest) => {
   const { requester, donor } = bloodRequestData;
-
-  // check if logged in user is requester or not
-  if (decodedUser.username !== requester.username) {
-    throw new Error(
-      'RedHope does not allow you to create blood request for others. Only you can create blood request for yourself.',
-    );
-  }
 
   // check if requester and donor are same
   if (requester.username === donor.username) {

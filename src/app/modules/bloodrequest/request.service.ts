@@ -11,7 +11,7 @@ const createBloodRequestInDB = async (bloodRequestData: TBloodRequest) => {
 
   // check if requester and donor are same
   if (requester.username === donor.username) {
-    throw new Error('Requester and donor cannot be same');
+    throw new Error('You can not request blood from yourself');
   }
   // check if donor is available to donate
   if (!donor.isAvailableToDonate) {

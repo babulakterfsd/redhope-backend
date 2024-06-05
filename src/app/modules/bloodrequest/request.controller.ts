@@ -21,10 +21,9 @@ const createBloodRequest = catchAsync(async (req, res) => {
 
 // get blood requests made by me
 const getBloodRequestsMadeByMe = catchAsync(async (req, res) => {
-  const requesterEmail = req?.query?.requesterEmail as string;
-
-  const result =
-    await BloodRequestServices.getBloodRequestsMadeByMe(requesterEmail);
+  const result = await BloodRequestServices.getBloodRequestsMadeByMe(
+    req?.query,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

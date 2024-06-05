@@ -44,12 +44,33 @@ const createBloodRequestInDB = async (bloodRequestData: TBloodRequest) => {
 };
 
 // get blood requests made by me
-const getBloodRequestsMadeByMe = async (requesterEmail: string) => {
-  const bloodRequests = await BloodRequestModel.find({
+const getBloodRequestsMadeByMe = async (reqQuery: any) => {
+  const { page, limit, requesterEmail } = reqQuery;
+
+  const totalDocs = await BloodRequestModel.countDocuments({
     'requester.email': requesterEmail,
   });
+  const meta = {
+    page: Number(page) || 1,
+    limit: Number(limit) || 10,
+    total: totalDocs,
+  };
 
-  return bloodRequests;
+  //implement pagination
+  const pageToBeFetched = Number(page) || 1;
+  const limitToBeFetched = Number(limit) || 10;
+  const skip = (pageToBeFetched - 1) * limitToBeFetched;
+
+  const bloodRequests = await BloodRequestModel.find({
+    'requester.email': requesterEmail,
+  })
+    .skip(skip)
+    .limit(limitToBeFetched);
+
+  return {
+    meta,
+    bloodRequests,
+  };
 };
 
 // get blood requests made to me

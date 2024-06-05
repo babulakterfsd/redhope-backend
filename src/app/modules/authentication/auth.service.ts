@@ -571,10 +571,11 @@ const activateOrInactivateAccount = async (reqBody: any) => {
     throw new Error('User not found');
   }
 
-  user.isAccountActive =
-    activeStatus !== undefined ? activeStatus : user?.isAccountActive;
+  user.role = userRole !== undefined ? userRole : user.role;
 
-  user.role = userRole !== undefined ? userRole : user?.role;
+  user.isAccountActive =
+    activeStatus !== undefined ? activeStatus : user.isAccountActive;
+
   await user.save();
 
   return {

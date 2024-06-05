@@ -197,7 +197,7 @@ const activateOrInactivateAccount = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User account has been updated succesfully',
+    message: 'Account has been updated succesfully',
     data: result,
   });
 });

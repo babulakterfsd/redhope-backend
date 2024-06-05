@@ -1,5 +1,4 @@
 import express from 'express';
-import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { UserControllers } from './auth.controller';
 import {
@@ -40,7 +39,7 @@ router.post('/verify-token', UserControllers.verifyToken);
 router.post('/refresh-token', UserControllers.getAccessTokenUsingRefreshToken);
 
 // get all users for admin
-router.get('/getallusers', auth('admin'), UserControllers.getAllUsersForAdmin);
+router.get('/getallusers', UserControllers.getAllUsersForAdmin);
 
 // get all donors
 router.get('/getalldonors', UserControllers.getAllDonors);
@@ -58,7 +57,6 @@ router.get(
 router.post(
   '/change-user-status-or-role',
   validateRequest(changeUserStatusSchema),
-  auth('admin'),
   UserControllers.activateOrInactivateAccount,
 );
 

@@ -140,18 +140,7 @@ const logoutUser = catchAsync(async (req, res) => {
 
 // get all users for admin
 const getAllUsersForAdmin = catchAsync(async (req, res) => {
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
-
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
-  const result = await UserServices.getAllUsersFromDB(
-    decodedUser as TDecodedUser,
-    req,
-  );
+  const result = await UserServices.getAllUsersFromDB(req?.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -203,22 +192,7 @@ const getSingleDonorByEmail = catchAsync(async (req, res) => {
 
 // activate or deactivate user by admin
 const activateOrInactivateAccount = catchAsync(async (req, res) => {
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
-
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
-  const { email, activeStatus, userRole } = req.body;
-
-  const result = await UserServices.activateOrInactivateAccount(
-    decodedUser as TDecodedUser,
-    email,
-    activeStatus,
-    userRole,
-  );
+  const result = await UserServices.activateOrInactivateAccount(req?.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

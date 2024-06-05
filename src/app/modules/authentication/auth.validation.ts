@@ -136,7 +136,11 @@ export const signupSchema = z.object({
 });
 
 export const changeUserStatusSchema = z.object({
-  email: z.string({
+  adminEmail: z.string({
+    invalid_type_error: ' must be string',
+    required_error: ' is required',
+  }),
+  userEmail: z.string({
     invalid_type_error: ' must be string',
     required_error: ' is required',
   }),

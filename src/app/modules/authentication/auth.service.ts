@@ -14,7 +14,6 @@ import {
   TDecodedUser,
   TUser,
   TUserProfileDataToBeUpdated,
-  TUserRole,
 } from './auth.interface';
 import { UserModel } from './auth.model';
 
@@ -88,10 +87,6 @@ const loginUserInDB = async (user: TUser) => {
 
   if (!isUserExistsWithEmail) {
     throw new Error('No user found with this email');
-  }
-
-  if (userFromDB?.isAccountActive === false) {
-    throw new Error('User account is inactive, please contact admin');
   }
 
   const isPasswordMatched = await bcrypt.compare(
@@ -286,8 +281,6 @@ const changePasswordInDB = async (passwordData: TChangePasswordData) => {
 const updateUserProfileInDB = async (
   dataToBeUpdated: TUserProfileDataToBeUpdated,
 ) => {
-  console.log('dataToBeUpdated', dataToBeUpdated);
-
   const userEmail = dataToBeUpdated?.email;
 
   const userFromDB = await UserModel.findOne({
@@ -396,13 +389,8 @@ const logoutUserInDB = async (token: string) => {
 };
 
 // get all users for admin to manage
-const getAllUsersFromDB = async (decodedUser: TDecodedUser, req: Request) => {
-  const { role } = decodedUser;
-  if (role !== 'admin') {
-    throw new Error('Unauthorized Access');
-  }
-
-  const { page, limit, search } = req?.query;
+const getAllUsersFromDB = async (reqQuery: any) => {
+  const { page, limit } = reqQuery;
   const totalDocs = await UserModel.countDocuments();
 
   const meta = {
@@ -416,17 +404,7 @@ const getAllUsersFromDB = async (decodedUser: TDecodedUser, req: Request) => {
   const limitToBeFetched = Number(limit) || 10;
   const skip = (pageToBeFetched - 1) * limitToBeFetched;
 
-  // search by name or email
-  const filter: Record<string, any> = {};
-
-  if (search) {
-    filter.$or = [
-      { name: new RegExp(String(search), 'i') },
-      { email: new RegExp(String(search), 'i') },
-    ];
-  }
-
-  const result = await UserModel.find(filter)
+  const result = await UserModel.find()
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limitToBeFetched);
@@ -573,19 +551,20 @@ const getSingleDonorByEmailFromDB = async (email: string) => {
 };
 
 // activate or inactivate an user by admin
-const activateOrInactivateAccount = async (
-  decodedUser: TDecodedUser,
-  email: string,
-  activeStatus: boolean,
-  userRole: TUserRole,
-) => {
-  const { role: decodedUserRole } = decodedUser;
-  if (decodedUserRole !== 'admin') {
-    throw new Error('Unauthorized Access');
+const activateOrInactivateAccount = async (reqBody: any) => {
+  const { adminEmail, userEmail, activeStatus, userRole } = reqBody;
+
+  const isAdmin = await UserModel.findOne({
+    email: adminEmail,
+    role: 'admin',
+  });
+
+  if (!isAdmin) {
+    throw new Error('Unauthorized access');
   }
 
   const user = await UserModel.findOne({
-    email,
+    email: userEmail,
   });
 
   if (!user) {
@@ -594,6 +573,7 @@ const activateOrInactivateAccount = async (
 
   user.isAccountActive =
     activeStatus !== undefined ? activeStatus : user?.isAccountActive;
+
   user.role = userRole !== undefined ? userRole : user?.role;
   await user.save();
 

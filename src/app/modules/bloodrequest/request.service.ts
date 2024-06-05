@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unsafe-optional-chaining */
 
-import { TDecodedUser } from '../authentication/auth.interface';
 import { TBloodRequest } from './request.interface';
 import { BloodRequestModel } from './request.model';
 
@@ -74,12 +73,33 @@ const getBloodRequestsMadeByMe = async (reqQuery: any) => {
 };
 
 // get blood requests made to me
-const getBloodRequestsMadeToMe = async (decodedUser: TDecodedUser) => {
-  const bloodRequests = await BloodRequestModel.find({
-    'donor._id': decodedUser._id,
-  });
+const getBloodRequestsMadeToMe = async (reqQuery: any) => {
+  const { page, limit, donorEmail } = reqQuery;
 
-  return bloodRequests;
+  const totalDocs = await BloodRequestModel.countDocuments({
+    'donor.email': donorEmail,
+  });
+  const meta = {
+    page: Number(page) || 1,
+    limit: Number(limit) || 10,
+    total: totalDocs,
+  };
+
+  //implement pagination
+  const pageToBeFetched = Number(page) || 1;
+  const limitToBeFetched = Number(limit) || 10;
+  const skip = (pageToBeFetched - 1) * limitToBeFetched;
+
+  const bloodRequests = await BloodRequestModel.find({
+    'donor.email': donorEmail,
+  })
+    .skip(skip)
+    .limit(limitToBeFetched);
+
+  return {
+    meta,
+    bloodRequests,
+  };
 };
 
 export const BloodRequestServices = {

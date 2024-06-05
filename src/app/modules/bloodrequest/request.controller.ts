@@ -1,10 +1,7 @@
 import httpStatus from 'http-status';
-import jwt from 'jsonwebtoken';
-import config from '../../config';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 
-import { TDecodedUser } from '../authentication/auth.interface';
 import { BloodRequestServices } from './request.service';
 
 //create blood request
@@ -35,16 +32,8 @@ const getBloodRequestsMadeByMe = catchAsync(async (req, res) => {
 
 // get blood requests made to me
 const getBloodRequestsMadeToMe = catchAsync(async (req, res) => {
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
-
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
   const result = await BloodRequestServices.getBloodRequestsMadeToMe(
-    decodedUser as TDecodedUser,
+    req?.query,
   );
 
   sendResponse(res, {

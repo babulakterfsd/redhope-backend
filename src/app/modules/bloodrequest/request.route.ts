@@ -1,5 +1,4 @@
 import express from 'express';
-import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { BloodRequestController } from './request.controller';
 import { bloodRequestValidationSchema } from './request.validation';
@@ -22,7 +21,6 @@ router.get(
 // get blood requests made to me
 router.get(
   '/requests-made-to-me',
-  auth('admin', 'donor'),
   BloodRequestController.getBloodRequestsMadeToMe,
 );
 

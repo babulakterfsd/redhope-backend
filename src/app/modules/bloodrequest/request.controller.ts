@@ -44,8 +44,26 @@ const getBloodRequestsMadeToMe = catchAsync(async (req, res) => {
   });
 });
 
+// update blood request status
+const updateBloodRequestStatus = catchAsync(async (req, res) => {
+  const { bloodRequestId, status } = req?.body;
+
+  const result = await BloodRequestServices.updateBloodRequestStatusInDB(
+    bloodRequestId,
+    status,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Blood request status updated successfully',
+    data: result,
+  });
+});
+
 export const BloodRequestController = {
   createBloodRequest,
   getBloodRequestsMadeByMe,
   getBloodRequestsMadeToMe,
+  updateBloodRequestStatus,
 };

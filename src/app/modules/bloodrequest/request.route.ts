@@ -24,4 +24,10 @@ router.get(
   BloodRequestController.getBloodRequestsMadeToMe,
 );
 
+// update blood request status
+router.put(
+  '/update-blood-request-status',
+  BloodRequestController.updateBloodRequestStatus,
+);
+
 export const BloodRequestRoutes = router;

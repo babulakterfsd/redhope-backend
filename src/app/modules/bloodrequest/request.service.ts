@@ -102,8 +102,27 @@ const getBloodRequestsMadeToMe = async (reqQuery: any) => {
   };
 };
 
+// update a blood request status
+const updateBloodRequestStatusInDB = async (
+  bloodRequestId: string,
+  status: 'pending' | 'accepted' | 'rejected',
+) => {
+  const bloodRequest = await BloodRequestModel.findById(bloodRequestId);
+
+  if (!bloodRequest) {
+    throw new Error('Request not found');
+  }
+
+  bloodRequest.requestStatus = status;
+
+  const result = await bloodRequest.save();
+
+  return result;
+};
+
 export const BloodRequestServices = {
   createBloodRequestInDB,
   getBloodRequestsMadeByMe,
   getBloodRequestsMadeToMe,
+  updateBloodRequestStatusInDB,
 };

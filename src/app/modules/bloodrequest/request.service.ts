@@ -44,9 +44,9 @@ const createBloodRequestInDB = async (bloodRequestData: TBloodRequest) => {
 };
 
 // get blood requests made by me
-const getBloodRequestsMadeByMe = async (decodedUser: TDecodedUser) => {
+const getBloodRequestsMadeByMe = async (requesterEmail: string) => {
   const bloodRequests = await BloodRequestModel.find({
-    'requester._id': decodedUser._id,
+    'requester.email': requesterEmail,
   });
 
   return bloodRequests;

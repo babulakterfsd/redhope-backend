@@ -16,7 +16,6 @@ router.post(
 // get blood requests made by me
 router.get(
   '/requests-made-by-me',
-  auth('admin', 'donor'),
   BloodRequestController.getBloodRequestsMadeByMe,
 );
 

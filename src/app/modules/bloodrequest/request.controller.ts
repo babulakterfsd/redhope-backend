@@ -21,17 +21,10 @@ const createBloodRequest = catchAsync(async (req, res) => {
 
 // get blood requests made by me
 const getBloodRequestsMadeByMe = catchAsync(async (req, res) => {
-  const token = req?.headers?.authorization;
-  const splittedToken = token?.split(' ')[1] as string;
+  const requesterEmail = req?.query?.requesterEmail as string;
 
-  const decodedUser = jwt.verify(
-    splittedToken,
-    config.jwt_access_secret as string,
-  );
-
-  const result = await BloodRequestServices.getBloodRequestsMadeByMe(
-    decodedUser as TDecodedUser,
-  );
+  const result =
+    await BloodRequestServices.getBloodRequestsMadeByMe(requesterEmail);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

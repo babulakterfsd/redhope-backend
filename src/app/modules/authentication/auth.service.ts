@@ -174,7 +174,7 @@ const getAccessTokenByRefreshToken = async (token: string) => {
     throw new JsonWebTokenError('Unauthorized Access!');
   }
 
-  const { _id, name, role, email, isAccountActive } = decodedUser as JwtPayload;
+  const { email } = decodedUser as JwtPayload;
 
   // checking if the user exists
   const userFromDB = await UserModel.isUserExistsWithEmail(email);
@@ -571,12 +571,24 @@ const activateOrInactivateAccount = async (reqBody: any) => {
     throw new Error('User not found');
   }
 
-  user.role = userRole !== undefined ? userRole : user.role;
+  // user.role = userRole !== undefined ? userRole : user.role;
 
-  user.isAccountActive =
-    activeStatus !== undefined ? activeStatus : user.isAccountActive;
+  // user.isAccountActive =
+  //   activeStatus !== undefined ? activeStatus : user.isAccountActive;
 
-  await user.save();
+  // await user.save();
+
+  await UserModel.findOneAndUpdate(
+    { email: userEmail },
+    {
+      role: userRole !== undefined ? userRole : user.role,
+      isAccountActive:
+        activeStatus !== undefined ? activeStatus : user.isAccountActive,
+    },
+    {
+      new: true,
+    },
+  );
 
   return {
     _id: user?._id,

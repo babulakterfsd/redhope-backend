@@ -89,6 +89,10 @@ const loginUserInDB = async (user: TUser) => {
     throw new Error('No user found with this email');
   }
 
+  if (userFromDB?.isAccountActive === false) {
+    throw new Error('You are blocked. Please contact with admin.');
+  }
+
   const isPasswordMatched = await bcrypt.compare(
     user?.password,
     userFromDB?.password as string,
